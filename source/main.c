@@ -1,8 +1,8 @@
 /*	Author: kennethalvarez
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #3  Exercise #1
- *	Exercise Description: Count the number of 1s on ports A and B and output that number on port C.
+ *	Assignment: Lab #3  Exercise #2
+ *	Exercise Description: A car has a fuel-level sensor that sets PA3..PA0 to a value between 0 (empty) and 15 (full).
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -12,30 +12,33 @@
 #include "simAVRHeader.h"
 #endif
 
-unsigned char GetBit(unsigned char x, unsigned char k) { //USED FROM ZYBOOKS
-   return ((x & (0x01 << k)) != 0);
-}
+
 
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
-	DDRB = 0x00; PORTB = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
 	
     /* Insert your solution below */
     while (1) {
-	unsigned char cntA = 0;
-        unsigned char cntB = 0;
-	for(unsigned char i = 0; i < 8; i++) {
-		if(GetBit(PINA, i)) {
-			++cntA;
-		}
-		if(GetBit(PINB, i)) {
-			++cntB;
-		} 
+	if(PINA <= 2) {
+		PORTC = 0x60; //0110 0000
 	}
-
-	PORTC = cntA + cntB;
+	else if((PINA <= 4) && (PINA > 2)) {
+		PORTC = 0x70; //0111 0000
+	}
+	else if((PINA <= 6) && (PINA >= 5)) {
+		PORTC = 0x38; //0011 1000
+	}
+	else if((PINA <= 9) && (PINA >= 7)) {
+		PORTC = 0x3C; //0011 1100
+	}
+	else if((PINA <= 12) && (PINA >= 10)) {
+		PORTC = 0x3E; //0011 1110
+	}
+	else if((PINA <= 15) && (PINA >= 13)) {
+		PORTC = 0x3F ; //0011 1111
+	}
     }
     return 1;
 }
