@@ -49,14 +49,14 @@ checkResult
 test "PINA: 0xFF, PINB: 0xFF => PORTC: 0x10"
 setPINA 0xFF
 setPINB 0xFF
-continue 5
+continue 1
 expectPORTC 0x10
 checkResult
 
 test "PINA: 0x0F, PINB: 0x0F => PORTC: 0x08"
 setPINA 0x0F
 setPINB 0X0F
-continue 5
+continue 1
 expectPORTC 0x08
 checkResult
 

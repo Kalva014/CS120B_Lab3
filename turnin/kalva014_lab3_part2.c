@@ -21,11 +21,10 @@ int main(void) {
 	DDRA = 0x00; PORTA = 0x00;
 	DDRB = 0x00; PORTB = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
-	
+	unsigned char cntA = 0;
+	unsigned char cntB = 0;
     /* Insert your solution below */
     while (1) {
-	unsigned char cntA = 0;
-        unsigned char cntB = 0;
 	for(unsigned char i = 0; i < 8; i++) {
 		if(GetBit(PINA, i)) {
 			++cntA;
