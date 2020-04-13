@@ -1,8 +1,8 @@
 /*	Author: kennethalvarez
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #3  Exercise #3
- *	Exercise Description: PC7 should light a "Fasten seatbelt" icon
+ *	Assignment: Lab #3  Exercise #4
+ *	Exercise Description: Read an 8-bit value on PA7..PA0 and write that value on PB3..PB0PC7..PC4
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -17,40 +17,19 @@
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
+	DDRB = 0xFF; PORTB = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
 
     /* Insert your solution below */
     while (1) {
-	unsigned char tmpC = 0x00;
+	unsigned char tmpA_upperNibble = 0x00;
+	unsigned char tmpA_lowerNibble = 0x00;
+	
+	tmpA_upperNibble =  PINA & 0xF0;
+	tmpA_lowerNibble = PINA  & 0x0F;
 
-	if ((PINA & 0x0F) == 0) {
-		tmpC = 0x40;
-	}
-	else if((PINA & 0x0F) <= 2) {
-		tmpC = 0x60; //0110 0000
-	}
-	else if(((PINA & 0x0F) <= 4) && ((PINA & 0x0F) > 2)) {
-		tmpC = 0x70; //0111 0000
-	}
-	else if(((PINA & 0x0F) <= 6) && ((PINA & 0x0F) >= 5)) {
-		tmpC = 0x38; //0011 1000
-	}
-	else if(((PINA & 0x0F) <= 9) && ((PINA & 0x0F) >= 7)) {
-		tmpC = 0x3C; //0011 1100
-	}
-	else if(((PINA & 0x0F) <= 12) && ((PINA & 0x0F) >= 10)) {
-		tmpC = 0x3E; //0011 1110
-	}
-	else if(((PINA & 0x0F) <= 15) && ((PINA & 0x0F ) >= 13)) {
-		tmpC = 0x3F ; //0011 1111
-	}
-
-	if(((PINA & 0x10) == 0x10) && ((PINA & 0x20) == 0x20) && ((PINA & 0x40) != 0x40)) { // set PC7 to 1
-		PORTC = 0x80 | tmpC; 
-	}
-	else {
-		PORTC = tmpC;
-	}
+	PORTB = tmpA_upperNibble >> 4;
+	PORTC = tmpA_lowerNibble << 4;
     }
     return 1;
 }

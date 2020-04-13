@@ -1,8 +1,8 @@
 /*	Author: kennethalvarez
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #3  Exercise #1
- *	Exercise Description: Count the number of 1s on ports A and B and output that number on port C.
+ *	Assignment: Lab #3  Exercise #4
+ *	Exercise Description: Read an 8-bit value on PA7..PA0 and write that value on PB3..PB0PC7..PC4
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -12,29 +12,24 @@
 #include "simAVRHeader.h"
 #endif
 
-unsigned char GetBit(unsigned char x, unsigned char k) { //USED FROM ZYBOOKS
-   return ((x & (0x01 << k)) != 0);
-}
+
 
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
-	DDRB = 0x00; PORTB = 0x00;
+	DDRB = 0xFF; PORTB = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
-	unsigned char cntA = 0;
-	unsigned char cntB = 0;
+
     /* Insert your solution below */
     while (1) {
-	for(unsigned char i = 0; i < 8; i++) {
-		if(GetBit(PINA, i)) {
-			++cntA;
-		}
-		if(GetBit(PINB, i)) {
-			++cntB;
-		} 
-	}
+	unsigned char tmpA_upperNibble = 0x00;
+	unsigned char tmpA_lowerNibble = 0x00;
+	
+	tmpA_upperNibble =  PINA & 0xF0;
+	tmpA_lowerNibble = PINA  & 0x0F;
 
-	PORTC = cntA + cntB;
+	PORTB = tmpA_upperNibble >> 4;
+	PORTC = tmpA_lowerNibble << 4;
     }
     return 1;
 }
