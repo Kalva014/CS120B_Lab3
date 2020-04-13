@@ -21,7 +21,7 @@ int main(void) {
 		
     /* Insert your solution below */
     while (1) {
-	unsigned short totalWeight = PIND + (PINB & 0x01);
+	unsigned short totalWeight = (PIND << 1) + (PINB & 0x01);
 	unsigned char tmpB = 0x00;
 
 	if((totalWeight > 70) || (totalWeight == 70)) { //airbag enabled
