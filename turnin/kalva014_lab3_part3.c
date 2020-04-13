@@ -18,10 +18,11 @@ int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
-	unsigned char tmpC = 0x00;
 
     /* Insert your solution below */
     while (1) {
+	unsigned char tmpC = 0x00;
+
 	if ((PINA & 0x0F) == 0) {
 		tmpC = 0x40;
 	}
@@ -44,7 +45,7 @@ int main(void) {
 		tmpC = 0x3F ; //0011 1111
 	}
 
-	if(((PINA & 0x10) == 0x10) || ((PINA & 0x20) == 0x20) || ((PINA & 0x40) != 0x40)) { // set PC7 to 1
+	if(((PINA & 0x10) == 0x10) && ((PINA & 0x20) == 0x20) && ((PINA & 0x40) != 0x40)) { // set PC7 to 1
 		PORTC = 0x80 | tmpC; 
 	}
 	else {
