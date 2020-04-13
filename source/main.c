@@ -16,20 +16,26 @@
 
 int main(void) {
     /* Insert DDR and PORT initializations */
-	DDRA = 0x00; PORTA = 0x00;
-	DDRB = 0xFF; PORTB = 0x00;
-	DDRC = 0xFF; PORTC = 0x00;
-
+	DDRB = 0xFE; PORTB = 0x00; //Output except on lower nibble PB0 is input
+	DDRD = 0x00; PORTD = 0x00; //Input
+		
     /* Insert your solution below */
     while (1) {
-	unsigned char tmpA_upperNibble = 0x00;
-	unsigned char tmpA_lowerNibble = 0x00;
-	
-	tmpA_upperNibble =  PINA & 0xF0;
-	tmpA_lowerNibble = PINA  & 0x0F;
+	unsigned short totalWeight = PIND + (PINB & 0x01);
+	unsigned char tmpB = 0x00;
 
-	PORTB = tmpA_upperNibble >> 4;
-	PORTC = tmpA_lowerNibble << 4;
+	if((totalWeight > 70) || (totalWeight == 70)) { //airbag enabled
+		tmpB = 0x02;		
+	}
+	else if((totalWeight > 5) && (totalWeight < 70)) {
+		tmpB = 0x04;
+	}
+	else if(totalWeight < 5) {
+		tmpB = 0x00;
+	}
+	
+	PORTB = tmpB;
+	
     }
     return 1;
 }
