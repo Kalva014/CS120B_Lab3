@@ -39,8 +39,8 @@ echo Running all tests..."\n\n
 #checkResult
 
 # Add tests below
-test "PINA: 0x01 => PORTC: 0x60"
-setPINA 0x01
+test "PINA: 0x71 => PORTC: 0x60"
+setPINA 0x71
 continue 5
 expectPORTC 0x60
 checkResult

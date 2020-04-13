@@ -1,8 +1,8 @@
 /*	Author: kennethalvarez
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #3  Exercise #1
- *	Exercise Description: Count the number of 1s on ports A and B and output that number on port C.
+ *	Assignment: Lab #3  Exercise #3
+ *	Exercise Description: PC7 should light a "Fasten seatbelt" icon
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -12,29 +12,44 @@
 #include "simAVRHeader.h"
 #endif
 
-unsigned char GetBit(unsigned char x, unsigned char k) { //USED FROM ZYBOOKS
-   return ((x & (0x01 << k)) != 0);
-}
+
 
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
-	DDRB = 0x00; PORTB = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
-	unsigned char cntA = 0;
-	unsigned char cntB = 0;
+	unsigned char tmpC = 0x00;
+
     /* Insert your solution below */
     while (1) {
-	for(unsigned char i = 0; i < 8; i++) {
-		if(GetBit(PINA, i)) {
-			++cntA;
-		}
-		if(GetBit(PINB, i)) {
-			++cntB;
-		} 
+	if ((PINA & 0x0F) == 0) {
+		tmpC = 0x40;
+	}
+	else if((PINA & 0x0F) <= 2) {
+		tmpC = 0x60; //0110 0000
+	}
+	else if(((PINA & 0x0F) <= 4) && ((PINA & 0x0F) > 2)) {
+		tmpC = 0x70; //0111 0000
+	}
+	else if(((PINA & 0x0F) <= 6) && ((PINA & 0x0F) >= 5)) {
+		tmpC = 0x38; //0011 1000
+	}
+	else if(((PINA & 0x0F) <= 9) && ((PINA & 0x0F) >= 7)) {
+		tmpC = 0x3C; //0011 1100
+	}
+	else if(((PINA & 0x0F) <= 12) && ((PINA & 0x0F) >= 10)) {
+		tmpC = 0x3E; //0011 1110
+	}
+	else if(((PINA & 0x0F) <= 15) && ((PINA & 0x0F ) >= 13)) {
+		tmpC = 0x3F ; //0011 1111
 	}
 
-	PORTC = cntA + cntB;
+	if(((PINA & 0x10) == 0x10) || ((PINA & 0x20) == 0x20) || ((PINA & 0x40) != 0x40)) { // set PC7 to 1
+		PORTC = 0x80 | tmpC; 
+	}
+	else {
+		PORTC = tmpC;
+	}
     }
     return 1;
 }

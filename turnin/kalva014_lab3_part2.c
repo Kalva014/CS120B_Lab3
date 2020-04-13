@@ -21,7 +21,10 @@ int main(void) {
 	
     /* Insert your solution below */
     while (1) {
-	if(PINA <= 2) {
+	if (PINA == 0) {
+		PORTC = 0x40;
+	}
+	else if(PINA <= 2) {
 		PORTC = 0x60; //0110 0000
 	}
 	else if((PINA <= 4) && (PINA > 2)) {

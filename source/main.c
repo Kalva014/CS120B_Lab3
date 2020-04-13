@@ -1,8 +1,8 @@
 /*	Author: kennethalvarez
  *  Partner(s) Name: 
  *	Lab Section:
- *	Assignment: Lab #3  Exercise #2
- *	Exercise Description: A car has a fuel-level sensor that sets PA3..PA0 to a value between 0 (empty) and 15 (full).
+ *	Assignment: Lab #3  Exercise #3
+ *	Exercise Description: PC7 should light a "Fasten seatbelt" icon
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -18,26 +18,37 @@ int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0x00;
 	DDRC = 0xFF; PORTC = 0x00;
-	
+	unsigned char tmpC = 0x00;
+
     /* Insert your solution below */
     while (1) {
-	if(PINA <= 2) {
-		PORTC = 0x60; //0110 0000
+	if ((PINA & 0x0F) == 0) {
+		tmpC = 0x40;
 	}
-	else if((PINA <= 4) && (PINA > 2)) {
-		PORTC = 0x70; //0111 0000
+	else if((PINA & 0x0F) <= 2) {
+		tmpC = 0x60; //0110 0000
 	}
-	else if((PINA <= 6) && (PINA >= 5)) {
-		PORTC = 0x38; //0011 1000
+	else if(((PINA & 0x0F) <= 4) && ((PINA & 0x0F) > 2)) {
+		tmpC = 0x70; //0111 0000
 	}
-	else if((PINA <= 9) && (PINA >= 7)) {
-		PORTC = 0x3C; //0011 1100
+	else if(((PINA & 0x0F) <= 6) && ((PINA & 0x0F) >= 5)) {
+		tmpC = 0x38; //0011 1000
 	}
-	else if((PINA <= 12) && (PINA >= 10)) {
-		PORTC = 0x3E; //0011 1110
+	else if(((PINA & 0x0F) <= 9) && ((PINA & 0x0F) >= 7)) {
+		tmpC = 0x3C; //0011 1100
 	}
-	else if((PINA <= 15) && (PINA >= 13)) {
-		PORTC = 0x3F ; //0011 1111
+	else if(((PINA & 0x0F) <= 12) && ((PINA & 0x0F) >= 10)) {
+		tmpC = 0x3E; //0011 1110
+	}
+	else if(((PINA & 0x0F) <= 15) && ((PINA & 0x0F ) >= 13)) {
+		tmpC = 0x3F ; //0011 1111
+	}
+
+	if(((PINA & 0x10) == 0x10) || ((PINA & 0x20) == 0x20) || ((PINA & 0x40) != 0x40)) { // set PC7 to 1
+		PORTC = 0x80 | tmpC; 
+	}
+	else {
+		PORTC = tmpC;
 	}
     }
     return 1;
